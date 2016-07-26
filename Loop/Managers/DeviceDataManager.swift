@@ -94,7 +94,9 @@ class DeviceDataManager: CarbStoreDelegate, TransmitterDelegate {
 
     @objc private func receivedRileyLinkTimerTickNotification(note: NSNotification) {
         backfillGlucoseFromShareIfNeeded() {
-            self.assertCurrentPumpData()
+            self.backfillGlucoseFromNightscoutIfNeeded() {
+                self.assertCurrentPumpData()
+            }
         }
     }
 
