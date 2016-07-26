@@ -157,7 +157,8 @@ class DeviceDataManager: CarbStoreDelegate, TransmitterDelegate {
         latestPumpStatus = status
 
         backfillGlucoseFromShareIfNeeded()
-
+        backfillGlucoseFromNightscoutIfNeeded()
+        
         // Minimed sensor glucose
         switch status.glucose {
         case .Active(glucose: let glucose):
@@ -532,6 +533,51 @@ class DeviceDataManager: CarbStoreDelegate, TransmitterDelegate {
             }
         }
     }
+    
+    /**
+     Attempts to backfill glucose data from nightscout if we don't have a latestGlucoseMessage
+     
+     - parameter completion: An optional closure called after the command is complete.
+     */
+    private func backfillGlucoseFromNightscoutIfNeeded(completion completion: (() -> Void)? = nil) {
+        // We should have no G5 data, and a configured NightscoutClient and GlucoseStore.
+        guard latestGlucoseMessage == nil, let nightscoutClient = remoteDataManager.nightscoutClient, glucoseStore = glucoseStore else {
+            completion?()
+            return
+        }
+        
+        // If our last glucose was less than 4 minutes ago, don't fetch.
+        if let latestGlucose = glucoseStore.latestGlucose where latestGlucose.startDate.timeIntervalSinceNow > -NSTimeInterval(minutes: 4) {
+            completion?()
+            return
+        }
+        
+        nightscoutClient.fetchLast(6) { (result) in
+            
+            guard case .Success(let glucose) = result else {
+                if case .Failure(let error) = result {
+                    self.logger.addError(error, fromSource: "NightscoutClient")
+                }
+                return
+            }
+        
+            // Ignore glucose values that are up to a minute newer than our previous value, to account for possible time shifting in Share data
+            let newGlucose = glucose.filterDateRange(glucoseStore.latestGlucose?.startDate.dateByAddingTimeInterval(NSTimeInterval(minutes: 1)), nil).map {
+                return (quantity: $0.quantity, date: $0.startDate, displayOnly: false)
+            }
+            
+            glucoseStore.addGlucoseValues(newGlucose, device: nil) { (_, _, error) -> Void in
+                if let error = error {
+                    self.logger.addError(error, fromSource: "GlucoseStore")
+                }
+                
+                NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.GlucoseUpdatedNotification, object: self)
+                
+                completion?()
+            }
+        }
+    }
+
 
     // MARK: - Configuration
 

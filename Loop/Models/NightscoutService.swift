@@ -36,7 +36,7 @@ struct NightscoutService: ServiceAuthentication {
 
         verify { _, _ in }
     }
-
+    
     // The uploader instance, if credentials are present
     private(set) var uploader: NightscoutUploader? {
         didSet {

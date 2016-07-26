@@ -133,6 +133,11 @@
 		43F78D4E1C914197002152D1 /* InsulinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F78D4A1C914197002152D1 /* InsulinKit.framework */; };
 		43F78D4F1C914197002152D1 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F78D4B1C914197002152D1 /* LoopKit.framework */; };
 		C10428971D17BAD400DD539A /* NightscoutUploadKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10428961D17BAD400DD539A /* NightscoutUploadKit.framework */; };
+		C13381971D46AF8600852E70 /* NightscoutClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13381961D46AF8600852E70 /* NightscoutClientTests.swift */; };
+		C13381991D46C14400852E70 /* nightscout_share_bridge_sgvs.json in Resources */ = {isa = PBXBuildFile; fileRef = C13381981D46C14400852E70 /* nightscout_share_bridge_sgvs.json */; };
+		C133819B1D46C1A900852E70 /* nightscout_xdrip_sgvs.json in Resources */ = {isa = PBXBuildFile; fileRef = C133819A1D46C1A900852E70 /* nightscout_xdrip_sgvs.json */; };
+		C1735FCD1D42BA5F004CB08D /* NightscoutClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1735FCC1D42BA5F004CB08D /* NightscoutClient.swift */; };
+		C1735FCF1D46A526004CB08D /* NightscoutGlucose+GlucoseKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1735FCE1D46A526004CB08D /* NightscoutGlucose+GlucoseKit.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -346,6 +351,11 @@
 		43F78D4A1C914197002152D1 /* InsulinKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = InsulinKit.framework; path = Carthage/Build/iOS/InsulinKit.framework; sourceTree = "<group>"; };
 		43F78D4B1C914197002152D1 /* LoopKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LoopKit.framework; path = Carthage/Build/iOS/LoopKit.framework; sourceTree = "<group>"; };
 		C10428961D17BAD400DD539A /* NightscoutUploadKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NightscoutUploadKit.framework; path = Carthage/Build/iOS/NightscoutUploadKit.framework; sourceTree = "<group>"; };
+		C13381961D46AF8600852E70 /* NightscoutClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutClientTests.swift; sourceTree = "<group>"; };
+		C13381981D46C14400852E70 /* nightscout_share_bridge_sgvs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = nightscout_share_bridge_sgvs.json; sourceTree = "<group>"; };
+		C133819A1D46C1A900852E70 /* nightscout_xdrip_sgvs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = nightscout_xdrip_sgvs.json; sourceTree = "<group>"; };
+		C1735FCC1D42BA5F004CB08D /* NightscoutClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutClient.swift; sourceTree = "<group>"; };
+		C1735FCE1D46A526004CB08D /* NightscoutGlucose+GlucoseKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NightscoutGlucose+GlucoseKit.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -444,6 +454,8 @@
 				434F545E1D288345002A9274 /* ShareService.swift */,
 				434F24C81CFCA8940004498F /* TransmitterGlucose.swift */,
 				4328E0311CFC068900E199AA /* WatchContext+LoopKit.swift */,
+				C1735FCC1D42BA5F004CB08D /* NightscoutClient.swift */,
+				C1735FCE1D46A526004CB08D /* NightscoutGlucose+GlucoseKit.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -646,6 +658,9 @@
 			children = (
 				43E2D90F1D20C581004DA55F /* Info.plist */,
 				43E2D8C91D20B9E7004DA55F /* KeychainManagerTests.swift */,
+				C13381961D46AF8600852E70 /* NightscoutClientTests.swift */,
+				C13381981D46C14400852E70 /* nightscout_share_bridge_sgvs.json */,
+				C133819A1D46C1A900852E70 /* nightscout_xdrip_sgvs.json */,
 			);
 			path = LoopTests;
 			sourceTree = "<group>";
@@ -901,6 +916,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C133819B1D46C1A900852E70 /* nightscout_xdrip_sgvs.json in Resources */,
+				C13381991D46C14400852E70 /* nightscout_share_bridge_sgvs.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -963,6 +980,7 @@
 				43E3449F1B9D68E900C85C07 /* StatusTableViewController.swift in Sources */,
 				43DBF0531C93EC8200B3C386 /* DeviceDataManager.swift in Sources */,
 				43E2D8C81D208D5B004DA55F /* KeychainManager+Loop.swift in Sources */,
+				C1735FCD1D42BA5F004CB08D /* NightscoutClient.swift in Sources */,
 				4346D1E71C77F5FE00ABAFE3 /* ChartTableViewCell.swift in Sources */,
 				437CEEE41CDE5C0A003C8C80 /* UIImage.swift in Sources */,
 				436FACEC1D0BA246004E2427 /* SegmentedControlTableViewCell.swift in Sources */,
@@ -1000,6 +1018,7 @@
 				439897371CD2F80600223065 /* AnalyticsManager.swift in Sources */,
 				4346D1F61C78501000ABAFE3 /* ChartPoint.swift in Sources */,
 				438849EE1D2A1EBB003B3F23 /* MLabService.swift in Sources */,
+				C1735FCF1D46A526004CB08D /* NightscoutGlucose+GlucoseKit.swift in Sources */,
 				43F4EF1D1BA2A57600526CE1 /* DiagnosticLogger.swift in Sources */,
 				432E73CB1D24B3D6009AD15D /* RemoteDataManager.swift in Sources */,
 				438DADC81CDE8F8B007697A5 /* LoopStateView.swift in Sources */,
@@ -1050,6 +1069,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C13381971D46AF8600852E70 /* NightscoutClientTests.swift in Sources */,
 				43E2D9151D20C5A2004DA55F /* KeychainManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1140,7 +1160,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
-				MAIN_APP_BUNDLE_IDENTIFIER = com.loudnate.Loop;
+				MAIN_APP_BUNDLE_IDENTIFIER = com.rileylink.Loop;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1182,7 +1202,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
-				MAIN_APP_BUNDLE_IDENTIFIER = com.loudnate.Loop;
+				MAIN_APP_BUNDLE_IDENTIFIER = com.rileylink.Loop;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

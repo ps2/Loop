@@ -17,12 +17,17 @@ class RemoteDataManager {
         return nightscoutService.uploader
     }
 
+    var nightscoutClient: NightscoutClient?
+    
     var nightscoutService: NightscoutService {
         didSet {
             keychain.setNightscoutURL(nightscoutService.siteURL, secret: nightscoutService.APISecret)
+            if let siteURL = nightscoutService.siteURL, let APISecret = nightscoutService.APISecret {
+                nightscoutClient = NightscoutClient(siteURL: siteURL, APISecret: APISecret)
+            }
         }
     }
-
+    
     var shareClient: ShareClient? {
         return shareService.client
     }
@@ -44,6 +49,7 @@ class RemoteDataManager {
 
         if let (siteURL, APISecret) = keychain.getNightscoutCredentials() {
             nightscoutService = NightscoutService(siteURL: siteURL, APISecret: APISecret)
+            nightscoutClient = NightscoutClient(siteURL: siteURL, APISecret: APISecret)
         } else {
             nightscoutService = NightscoutService(siteURL: nil, APISecret: nil)
         }
