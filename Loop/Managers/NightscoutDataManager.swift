@@ -34,13 +34,13 @@ class NightscoutDataManager {
                 return
         }
         
-        deviceDataManager.loopManager.getLoopStatus { (predictedGlucose, recommendedTempBasal, lastTempBasal, lastLoopCompleted, insulinOnBoard, lastLoopError) in
+        deviceDataManager.loopManager.getLoopStatus { (predictedGlucose, carbEffect, insulinEffect, recommendedTempBasal, lastTempBasal, lastLoopCompleted, insulinOnBoard, lastLoopError) in
             
             self.deviceDataManager.loopManager.getRecommendedBolus { (bolusUnits, error) in
                 if error != nil {
                     self.deviceDataManager.logger.addError(error!, fromSource: "LoopManager")
                 }
-                self.uploadLoopStatus(insulinOnBoard, predictedGlucose: predictedGlucose, recommendedTempBasal: recommendedTempBasal, recommendedBolus: bolusUnits, lastTempBasal: lastTempBasal, lastLoopError: lastLoopError)
+                self.uploadLoopStatus(predictedGlucose, carbEffect: carbEffect, insulinEffect: insulinEffect, recommendedTempBasal: recommendedTempBasal, recommendedBolus: bolusUnits, lastTempBasal: lastTempBasal, insulinOnBoard: insulinOnBoard, lastLoopError: lastLoopError)
             }
         }
 
@@ -49,7 +49,7 @@ class NightscoutDataManager {
     
     private var lastTempBasalUploaded: DoseEntry?
 
-    private func uploadLoopStatus(insulinOnBoard: InsulinValue?, predictedGlucose: [GlucoseValue]?, recommendedTempBasal: LoopDataManager.TempBasalRecommendation?, recommendedBolus: Double?, lastTempBasal: DoseEntry?, lastLoopError: ErrorType?) {
+    private func uploadLoopStatus(predictedGlucose: [GlucoseValue]?, carbEffect: [GlucoseEffect]?, insulinEffect: [GlucoseEffect]?, recommendedTempBasal: LoopDataManager.TempBasalRecommendation?, recommendedBolus: Double?, lastTempBasal: DoseEntry?, insulinOnBoard: InsulinValue?, lastLoopError: ErrorType?) {
 
         guard deviceDataManager.remoteDataManager.nightscoutUploader != nil else {
             return
@@ -75,11 +75,31 @@ class NightscoutDataManager {
         let glucoseVal = glucose?.quantity
         
         let predBGs: PredictedBG?
-        
         if let predicted = predictedGlucose {
             let values = predicted.map({ (value) -> HKQuantity in
                 value.quantity
             })
+
+
+            // Apparently it's not so simple
+//            let unit = HKUnit.milligramsPerDeciliterUnit()
+//            let cob: [HKQuantity]?
+//            if let carbEffect = carbEffect {
+//                cob = Zip2Sequence(values,carbEffect).map({ (value, effect) -> HKQuantity in
+//                    HKQuantity(unit: unit, doubleValue: value.doubleValueForUnit(unit) + effect.quantity.doubleValueForUnit(unit))
+//                })
+//            } else {
+//                cob = nil
+//            }
+//            let iob: [HKQuantity]?
+//            if let insulinEffect = insulinEffect {
+//                iob = Zip2Sequence(values,insulinEffect).map({ (value, effect) -> HKQuantity in
+//                    HKQuantity(unit: unit, doubleValue: value.doubleValueForUnit(unit) + effect.quantity.doubleValueForUnit(unit))
+//                })
+//            } else {
+//                iob = nil
+//            }
+//            predBGs = PredictedBG(values: values, cob: cob, iob: iob)
             predBGs = PredictedBG(values: values)
         } else {
             predBGs = nil

@@ -207,7 +207,7 @@ class LoopDataManager {
         - lastLoopCompleted:    The last date at which a loop completed, from prediction to dose (if dosing is enabled)
         - error:                An error object explaining why the retrieval failed
      */
-    func getLoopStatus(resultsHandler: (predictedGlucose: [GlucoseValue]?, recommendedTempBasal: TempBasalRecommendation?, lastTempBasal: DoseEntry?, lastLoopCompleted: NSDate?, insulinOnBoard: InsulinValue?, error: ErrorType?) -> Void) {
+    func getLoopStatus(resultsHandler: (predictedGlucose: [GlucoseValue]?, carbEffect: [GlucoseEffect]?, insulinEffect: [GlucoseEffect]?, recommendedTempBasal: TempBasalRecommendation?, lastTempBasal: DoseEntry?, lastLoopCompleted: NSDate?, insulinOnBoard: InsulinValue?, error: ErrorType?) -> Void) {
         dispatch_async(dataAccessQueue) {
             var error: ErrorType?
 
@@ -217,7 +217,7 @@ class LoopDataManager {
                 error = updateError
             }
 
-            resultsHandler(predictedGlucose: self.predictedGlucose, recommendedTempBasal: self.recommendedTempBasal, lastTempBasal: self.lastTempBasal, lastLoopCompleted: self.lastLoopCompleted, insulinOnBoard: self.insulinOnBoard, error: error)
+            resultsHandler(predictedGlucose: self.predictedGlucose, carbEffect: self.carbEffect, insulinEffect: self.insulinEffect, recommendedTempBasal: self.recommendedTempBasal, lastTempBasal: self.lastTempBasal, lastLoopCompleted: self.lastLoopCompleted, insulinOnBoard: self.insulinOnBoard, error: error)
         }
     }
 
