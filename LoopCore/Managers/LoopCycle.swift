@@ -21,7 +21,10 @@ public protocol DeliveryDelegate: AnyObject {
     var isPumpConfigured: Bool { get }
     var pumpManagerStatus: PumpManagerStatus? { get }
     var pumpStatusHighlight: DeviceStatusHighlight? { get }
+    var pumpLifecycleProgress: DeviceLifecycleProgress? { get }
     var cgmManagerStatus: CGMManagerStatus? { get }
+    var cgmStatusHighlight: DeviceStatusHighlight? { get }
+    var cgmLifecycleProgress: DeviceLifecycleProgress? { get }
 
     func enact(bolus: Double?, tempBasal: LoopKit.TempBasalRecommendation?, decisionId: UUID?) async throws
     func enactBolus(units: Double, decisionId: UUID?, activationType: BolusActivationType) async throws
@@ -38,6 +41,14 @@ public protocol PumpManagerDeliveryDelegate: DeliveryDelegate {
 
     /// Sends a dose `enact` has checked, logged the device's way.
     func send(bolus: Double?, tempBasal: LoopKit.TempBasalRecommendation?, decisionId: UUID?, to pumpManager: PumpManager) async throws
+}
+
+/// What Loop's status header shows beyond the pump's highlight, for services such as caregiver apps.
+/// A delegate without a header to show (the watch over a lent pod) has none.
+public extension DeliveryDelegate {
+    var pumpLifecycleProgress: DeviceLifecycleProgress? { nil }
+    var cgmStatusHighlight: DeviceStatusHighlight? { nil }
+    var cgmLifecycleProgress: DeviceLifecycleProgress? { nil }
 }
 
 public extension PumpManagerDeliveryDelegate {
@@ -500,7 +511,10 @@ public final class LoopCycle {
                 imageName: pumpStatusHighlight.imageName,
                 state: pumpStatusHighlight.state)
         }
+        dosingDecision.pumpLifecycleProgress = host.deliveryDelegate?.pumpLifecycleProgress.map(StoredDosingDecision.StoredDeviceLifecycleProgress.init)
         dosingDecision.cgmManagerStatus = host.deliveryDelegate?.cgmManagerStatus
+        dosingDecision.cgmStatusHighlight = host.deliveryDelegate?.cgmStatusHighlight.map(StoredDosingDecision.StoredDeviceHighlight.init)
+        dosingDecision.cgmLifecycleProgress = host.deliveryDelegate?.cgmLifecycleProgress.map(StoredDosingDecision.StoredDeviceLifecycleProgress.init)
         dosingDecision.lastReservoirValue = StoredDosingDecision.LastReservoirValue(doseStore.lastReservoirValue)
 
         os_log("Manual bolus rec = %{public}@", log: log, type: .debug, String(describing: dosingDecision.manualBolusRecommendation))

@@ -26,7 +26,13 @@ class MockDeliveryDelegate: DeliveryDelegate {
 
     var pumpStatusHighlight: DeviceStatusHighlight?
 
+    var pumpLifecycleProgress: DeviceLifecycleProgress?
+
     var cgmManagerStatus: CGMManagerStatus?
+
+    var cgmStatusHighlight: DeviceStatusHighlight?
+
+    var cgmLifecycleProgress: DeviceLifecycleProgress?
 
     var lastEnact: (bolus: Double?, tempBasal: TempBasalRecommendation?)
 
