@@ -46,7 +46,10 @@ protocol DeliveryDelegate: AnyObject {
     var isPumpConfigured: Bool { get }
     var pumpManagerStatus: PumpManagerStatus? { get }
     var pumpStatusHighlight: DeviceStatusHighlight? { get }
+    var pumpLifecycleProgress: DeviceLifecycleProgress? { get }
     var cgmManagerStatus: CGMManagerStatus? { get }
+    var cgmStatusHighlight: DeviceStatusHighlight? { get }
+    var cgmLifecycleProgress: DeviceLifecycleProgress? { get }
 
     func enact(bolus: Double?, tempBasal: TempBasalRecommendation?, decisionId: UUID?) async throws
     func enactBolus(units: Double, decisionId: UUID?, activationType: BolusActivationType) async throws
@@ -918,7 +921,11 @@ final class LoopDataManager: ObservableObject {
                     imageName: pumpStatusHighlight.imageName,
                     state: pumpStatusHighlight.state)
             }
+            dosingDecision.pumpLifecycleProgress = deliveryDelegate?.pumpLifecycleProgress.map(StoredDosingDecision.StoredDeviceLifecycleProgress.init)
             dosingDecision.cgmManagerStatus = deliveryDelegate?.cgmManagerStatus
+            // What Loop's status header shows for the CGM, for services such as caregiver apps.
+            dosingDecision.cgmStatusHighlight = deliveryDelegate?.cgmStatusHighlight.map(StoredDosingDecision.StoredDeviceHighlight.init)
+            dosingDecision.cgmLifecycleProgress = deliveryDelegate?.cgmLifecycleProgress.map(StoredDosingDecision.StoredDeviceLifecycleProgress.init)
             dosingDecision.lastReservoirValue = StoredDosingDecision.LastReservoirValue(doseStore.lastReservoirValue)
 
             self.logger.debug("Manual bolus rec = %{public}@", String(describing: dosingDecision.manualBolusRecommendation))
