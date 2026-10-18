@@ -146,6 +146,9 @@ class ServicesManager {
             if let provider = service as? SupportProviding {
                 supportManager?.addSupport(provider.createSupport())
             }
+            if let alertResponder = service as? AlertResponder {
+                alertManager.addAlertResponder(managerIdentifier: service.pluginIdentifier, alertResponder: alertResponder)
+            }
 
             saveState()
         }
@@ -153,6 +156,9 @@ class ServicesManager {
 
     public func removeActiveService(_ service: Service) {
         servicesLock.withLock {
+            if service is AlertResponder {
+                alertManager.removeAlertResponder(managerIdentifier: service.pluginIdentifier)
+            }
             if let provider = service as? SupportProviding {
                 supportManager?.removeSupport(provider.createSupport())
             }
@@ -197,6 +203,10 @@ class ServicesManager {
                 }
                 if let remoteDataService = service as? RemoteDataService {
                     remoteDataServicesManager.restoreService(remoteDataService)
+                }
+                // A service's alerts can ask for an answer, such as approving a remote command.
+                if let alertResponder = service as? AlertResponder {
+                    alertManager.addAlertResponder(managerIdentifier: service.pluginIdentifier, alertResponder: alertResponder)
                 }
             }
         }

@@ -61,6 +61,24 @@ extension NotificationManager {
             options: .customDismissAction
         ))
 
+        // Approving a remote bolus or carb entry needs the phone unlocked.
+        categories.append(UNNotificationCategory(
+            identifier: LoopNotificationCategory.remoteCommandApproval.rawValue,
+            actions: [
+                UNNotificationAction(
+                    identifier: RemoteCommandApprovalAction.approve.rawValue,
+                    title: NSLocalizedString("Approve", comment: "The title of the notification action to approve a remote command"),
+                    options: .authenticationRequired
+                ),
+                UNNotificationAction(
+                    identifier: RemoteCommandApprovalAction.decline.rawValue,
+                    title: NSLocalizedString("Decline", comment: "The title of the notification action to decline a remote command"),
+                    options: .destructive
+                ),
+            ],
+            intentIdentifiers: [],
+            options: .customDismissAction
+        ))
 
         return Set(categories)
     }
